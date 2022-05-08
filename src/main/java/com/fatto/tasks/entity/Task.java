@@ -1,6 +1,7 @@
 package com.fatto.tasks.entity;
 
-import java.math.BigDecimal;
+
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ public class Task {
 	private Long id;
 	private String nome;
 	private Double custo;
-	private String dataLimite;
-	@Column(unique = true)
+	private Date dataLimite;
+	@Column(unique = true, updatable = false)
 	private int ordemApresentacao;
 }

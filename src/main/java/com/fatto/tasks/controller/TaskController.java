@@ -3,13 +3,16 @@ package com.fatto.tasks.controller;
 import java.util.List;
 
 import com.fatto.tasks.controller.dto.TaskFilter;
+import com.fatto.tasks.controller.dto.TaskResponse;
 import com.fatto.tasks.entity.Task;
 import com.fatto.tasks.service.TaskService;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +29,7 @@ public class TaskController {
     private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<TaskFilter> salvar(@RequestBody TaskFilter taskDto) {
+    public ResponseEntity<TaskResponse> salvar(@RequestBody TaskFilter taskDto) {
 
         
 		// convert DTO to entity
@@ -35,7 +38,7 @@ public class TaskController {
 		Task task = taskService.save(postRequest);
 
 		// convert entity to DTO
-		TaskFilter postResponse = modelMapper.map(task, TaskFilter.class);
+		TaskResponse postResponse = modelMapper.map(task, TaskResponse.class);
 
 		return ResponseEntity.status(200).body(postResponse);
     }
@@ -45,15 +48,14 @@ public class TaskController {
         return taskService.findAll().stream().map(task -> modelMapper.map(task, TaskFilter.class))
         .collect(Collectors.toList());
 
-        // return ResponseEntity.status(200).body(taskService.findAll());
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deletar(@RequestBody Task task) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<Long> deletar(@PathVariable Long id) {
 
-        taskService.delete(task);
-        return ResponseEntity.noContent().build();
+       taskService.delete(id);
 
+
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
-
 }
