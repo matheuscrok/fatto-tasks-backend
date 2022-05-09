@@ -2,6 +2,8 @@ package com.fatto.tasks.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import com.fatto.tasks.entity.Task;
 import com.fatto.tasks.repository.TaskRepository;
 
